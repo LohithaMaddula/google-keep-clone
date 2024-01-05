@@ -1,5 +1,4 @@
-import toast from "react-hot-toast"
-import { Link } from "react-router-dom"
+import toast from 'react-hot-toast'
 
 function Navbar() {
   const handleLogout = async () => {
@@ -11,10 +10,23 @@ function Navbar() {
       console.log(error)
     }
   }
+
   return (
-    <header className='flex justify-between bg-gray-400'>
-      <Link to={'/'}>Google Keep Clone</Link>
-      <button onClick={() => handleLogout()}>Logout</button>
+    <header className='flex justify-between p-3 bg-white'>
+      <img
+        src='keep.png'
+        alt='keep'
+        className='h-8 transition-all duration-300 hover:drop-shadow-xl'
+      />
+      <h1 className='text-2xl font-bold text-gray-600 transition-all duration-200 hover:text-black'>
+        Google Keep
+      </h1>
+      <button
+        onClick={() => handleLogout()}
+        className='px-2 transition-all duration-300 rounded hover:bg-gray-100'
+      >
+        Logout
+      </button>
     </header>
   )
 }

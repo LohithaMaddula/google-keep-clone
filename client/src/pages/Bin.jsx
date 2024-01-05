@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaTrashRestore } from 'react-icons/fa'
-import { FaTrash } from 'react-icons/fa'
+import NoteCard from '../components/NoteCard'
 
 function Bin() {
   const [notes, setNotes] = useState([])
@@ -23,7 +22,7 @@ function Bin() {
 
   const handleDelete = async (noteId) => {
     try {
-      const {data} = await axios.delete(`/api/delete/${noteId}`)
+      const { data } = await axios.delete(`/api/delete/${noteId}`)
       if (data.success) toast.success(data.success)
       else toast.error(data.message)
       getNotes()
@@ -34,7 +33,7 @@ function Bin() {
 
   const handleRestore = async (noteId, action) => {
     try {
-      const {data} = await axios.patch(`/api/manage/${noteId}/${action}`)
+      const { data } = await axios.patch(`/api/manage/${noteId}/${action}`)
       if (data.success) toast.success(data.success)
       else toast.error(data.message)
       getNotes()
@@ -43,27 +42,7 @@ function Bin() {
     }
   }
 
-  return (
-    <div className='grid grid-cols-4 transition-all duration-500'>
-      {notes?.map((data, index) => (
-        <div
-          key={index}
-          className='p-4 m-4 transition-all duration-500 bg-red-300 rounded hover:shadow-2xl'
-        >
-          <h1>{data.title}</h1>
-          <p>{data.description}</p>
-          <div className='flex justify-center gap-6'>
-            <button className='' onClick={() => handleDelete(data._id)}>
-              <FaTrash size={20}/>
-            </button>
-            <button className='' onClick={() => handleRestore(data._id, 'toNotes')}>
-              <FaTrashRestore size={20}/>
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
+  return <NoteCard notes={notes} handleDelete={handleDelete} handleRestore={handleRestore} />
 }
 
 export default Bin

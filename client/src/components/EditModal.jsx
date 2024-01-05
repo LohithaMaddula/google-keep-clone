@@ -2,19 +2,33 @@ import axios from 'axios'
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
+import Themes from './Themes'
 
-function EditModal({ note }) {
-  const [open, isOpen] = useState(false)
+function EditModal({ note, fetchNotes, setModal }) {
   const [title, setTitle] = useState(note.title)
   const [desc, setDesc] = useState(note.description)
+  const [theme, setTheme] = useState(note.theme)
 
   const handleEdit = async () => {
     try {
       const user = await note.user
       const noteId = await note._id
-      const {data} = await axios.patch(`/api/edit/${user}/${noteId}`, { title, desc, user })
-      if (data.success) toast.success(data.success)
-      else toast.error(data.message)
+      if (note.title === title && note.description === desc && note.theme === theme) {
+        toast.success('No changes made')
+        setModal(false)
+        return
+      }
+      const { data } = await axios.patch(`/api/edit/${user}/${noteId}`, {
+        title,
+        desc,
+        user,
+        theme,
+      })
+      if (data.success) {
+        toast.success(data.success)
+        fetchNotes()
+        setModal(false)
+      } else toast.error(data.message)
     } catch (error) {
       console.error(error)
     }
@@ -22,7 +36,7 @@ function EditModal({ note }) {
 
   return (
     <div>
-      <div className='flex flex-col justify-between gap-4'>
+      <div className={`flex flex-col justify-between gap-4 p-2 mt-2 bg-${theme}`}>
         <input
           type='text'
           placeholder='Title'
@@ -38,20 +52,13 @@ function EditModal({ note }) {
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
-        <button className='bg-red-400' onClick={() => isOpen(false)}>
+        <button className='bg-red-400' onClick={() => setModal(false)}>
           close
         </button>
         <button className='bg-green-400' onClick={() => handleEdit()}>
           Edit
         </button>
-        <div>
-          <div className='flex'>
-            <div className='p-2 bg-red-500 rounded-full' />
-            <div className='p-2 bg-green-500 rounded-full' />
-            <div className='p-2 bg-white rounded-full' />
-            <div className='p-2 bg-blue-500 rounded-full' />
-          </div>
-        </div>
+        <Themes setTheme={setTheme} />
       </div>
     </div>
   )
@@ -59,6 +66,8 @@ function EditModal({ note }) {
 
 EditModal.propTypes = {
   note: PropTypes.object,
+  fetchNotes: PropTypes.func,
+  setModal: PropTypes.func,
 }
 
 export default EditModal

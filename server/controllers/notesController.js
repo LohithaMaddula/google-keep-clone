@@ -2,9 +2,9 @@ import notesModel from '../models/notesModel.js'
 
 export const createNotes = async (req, res) => {
   try {
-    const { title, desc, user } = req.body
+    const { title, desc, user, theme } = req.body
     if (!title || !desc) return res.send({message: 'Fields are required'})
-    await notesModel.create({ title, description: desc, user })
+    await notesModel.create({ title, description: desc, user, theme })
     return res.status(201).send({success: 'Created Successfully'})
   } catch (error) {
     console.log(error)
@@ -115,8 +115,8 @@ export const fetchNote = async(req, res) => {
 export const editNote = async (req, res) => {
   try {
     const { user, noteId } = req.params
-    const { title, desc} = req.body
-    await notesModel.findByIdAndUpdate(noteId, {$set: {title, description: desc} })
+    const { title, desc, theme} = req.body
+    await notesModel.findByIdAndUpdate(noteId, {$set: {title, description: desc, theme} })
     return res.status(200).send({success: 'Successfully updated!'})
   } catch (error) {
     console.log(error)
