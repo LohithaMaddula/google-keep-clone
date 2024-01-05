@@ -77,7 +77,7 @@ function Home() {
   }
 
   return (
-    <div className='w-full h-screen pt-3 bg-white'>
+    <div className='w-full h-screen pt-3'>
       <div className='flex justify-center'>
         <InputField
           theme={theme}

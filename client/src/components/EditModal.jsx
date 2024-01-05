@@ -10,6 +10,7 @@ function EditModal({ note, fetchNotes, setModal }) {
   const [desc, setDesc] = useState(note.description)
   const [theme, setTheme] = useState(note.theme)
   const [collaborators, setCollaborators] = useState(note.collaborators)
+  const [isPublic, setIsPublic] = useState(note.isPublic)
   const auth = useAuth()
 
   const handleEdit = async () => {
@@ -20,7 +21,8 @@ function EditModal({ note, fetchNotes, setModal }) {
         note.title === title &&
         note.description === desc &&
         note.theme === theme &&
-        note.collaborators === collaborators
+        note.collaborators === collaborators &&
+        note.isPublic === isPublic
       ) {
         toast.success('No changes made')
         setModal(false)
@@ -32,6 +34,7 @@ function EditModal({ note, fetchNotes, setModal }) {
         user,
         theme,
         collaborators,
+        isPublic
       })
       if (data.success) {
         toast.success(data.success)
@@ -89,6 +92,8 @@ function EditModal({ note, fetchNotes, setModal }) {
                 </div>
               )
             })}
+            <input type='checkbox' id='private' onChange={() => setIsPublic(!isPublic)} checked={isPublic} />
+            <label htmlFor="private">is shared</label>
           </div>
         )}
         <button className='bg-red-400' onClick={() => setModal(false)}>

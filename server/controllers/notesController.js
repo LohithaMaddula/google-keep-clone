@@ -1,4 +1,5 @@
 import notesModel from '../models/notesModel.js'
+import mongoose from 'mongoose'
 
 export const createNotes = async (req, res) => {
   try {
@@ -95,7 +96,7 @@ export const pinNotes = async (req, res) => {
     return res.status(200).send({ success: successMessage })
   } catch (error) {
     console.log(error)
-    res.status(500).send({ error: 'Error on Pinning note' })
+    res.status(500).send({ error: 'Error while Pinning note' })
   }
 }
 
@@ -107,32 +108,53 @@ export const fetchNote = async (req, res) => {
     else return res.status(200).send(note)
   } catch (error) {
     console.log(error)
-    res.status(500).send({ error: 'Error on fetching note' })
+    res.status(500).send({ error: 'Error while fetching note' })
   }
 }
 
 export const editNote = async (req, res) => {
   try {
     const { user, noteId } = req.params
-    const { title, desc, theme, collaborators } = req.body
-    // return console.log(collaborators)
+    const { title, desc, theme, collaborators, isPublic } = req.body
     await notesModel.findByIdAndUpdate(noteId, {
-      $set: { title, description: desc, theme, collaborators},
+      $set: { title, description: desc, theme, collaborators, isPublic },
     })
     return res.status(200).send({ success: 'Successfully updated!' })
   } catch (error) {
     console.log(error)
-    res.status(500).send({ error: 'Error on fetching note' })
+    res.status(500).send({ error: 'Error while fetching note' })
   }
 }
 
 export const fetchCollabedNotes = async (req, res) => {
   try {
     const { user } = req.params
-    const response = await notesModel.find({ collaborators: user })
-    return res.status(200).send(response)
+    const notes = await notesModel.find({ collaborators: user })
+    return res.status(200).send(notes)
   } catch (error) {
     console.log(error)
-    res.status(500).send({ error: 'Error on fetching collabed notes' })
+    res.status(500).send({ error: 'Error while fetching collabed notes' })
+  }
+}
+
+export const fetchSharedNote = async (req, res) => {
+  try {
+    const { noteId } = req.params
+    if (!/^[0-9a-fA-F]{24}$/.test(noteId)) return res.status(400).send({ message: 'Invalid link' })
+    const {
+      Types: { ObjectId },
+    } = mongoose
+    const objectId = new ObjectId(noteId)
+    const note = await notesModel.findById(new ObjectId(noteId))
+    if (!note) {
+      return res.status(404).send({ message: 'Note not found' })
+    }
+    if (note.isPublic === false) {
+      return res.send({ message: 'This is a private note' })
+    }
+    return res.status(200).send(note)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ error: 'Error while fetching shared note' })
   }
 }

@@ -5,8 +5,9 @@ import Bin from './pages/Bin'
 import Layout from './pages/Layout'
 import axios from 'axios'
 import { Toaster } from 'react-hot-toast'
+import Shared from './pages/Shared'
 
-axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL
 // axios.defaults.withCredentials = true
 
 function App() {
@@ -15,7 +16,6 @@ function App() {
       <Toaster
         position='top-center'
         toastOptions={{
-          // duration: 4000,
           style: {
             borderRadius: '10px',
             background: '#2b3440',
@@ -26,9 +26,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path='*' element={<NotFound />} />
           <Route path='/bin' element={<Bin />} />
+          <Route path='/shared/:noteId' element={<Shared />} />
         </Route>
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   )

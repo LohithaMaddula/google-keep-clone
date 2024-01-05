@@ -12,7 +12,7 @@ function Navbar() {
   }
 
   return (
-    <header className='flex justify-between p-3 bg-white'>
+    <header className='flex justify-between p-3 '>
       <img
         src='keep.png'
         alt='keep'

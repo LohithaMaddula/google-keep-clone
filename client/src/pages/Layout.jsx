@@ -4,9 +4,9 @@ import Sidebar from '../components/Sidebar'
 
 function Layout() {
   return (
-    <div className='min-h-screen'>
+    <div className='flex flex-col min-h-screen'>
       <Navbar />
-      <div className='flex h-full'>
+      <div className='flex flex-grow'>
         <Sidebar />
         <Outlet />
       </div>
