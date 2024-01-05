@@ -2,9 +2,11 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import NoteCard from '../components/NoteCard'
+import Loading from '../components/Loading'
 
 function Bin() {
   const [notes, setNotes] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const getNotes = async () => {
     try {
@@ -42,7 +44,23 @@ function Bin() {
     }
   }
 
-  return <NoteCard notes={notes} handleDelete={handleDelete} handleRestore={handleRestore} />
+  setTimeout(() => {
+    setLoading(false)
+  }, 1000)
+
+  return (
+    <>
+      {loading ? (
+        <Loading />
+      ) : notes.length < 1 ? (
+        <div className='flex items-center justify-center flex-grow transition duration-300'>
+          <h1 className='text-xl font-bold text-gray-500'>Nothing :)</h1>
+        </div>
+      ) : (
+        <NoteCard notes={notes} handleDelete={handleDelete} handleRestore={handleRestore} />
+      )}
+    </>
+  )
 }
 
 export default Bin

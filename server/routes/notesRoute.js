@@ -8,6 +8,7 @@ import {
   fetchBinNotes,
   fetchNote,
   fetchNotes,
+  fetchCollabedNotes,
 } from '../controllers/notesController.js'
 
 const router = express.Router()
@@ -20,5 +21,6 @@ router.patch('/manage/:noteId/:action', manageNotes)
 router.patch('/pin/:noteId/:action', pinNotes)
 router.get('/note/:user/:noteId', fetchNote)
 router.patch('/edit/:user/:noteId', editNote)
+router.get('/collabed/:user', fetchCollabedNotes)
 
 export default router

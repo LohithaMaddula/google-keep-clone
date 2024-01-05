@@ -16,9 +16,9 @@ function Navbar() {
       <img
         src='keep.png'
         alt='keep'
-        className='h-8 transition-all duration-300 hover:drop-shadow-xl'
+        className='h-8 transition-all duration-300 cursor-pointer hover:drop-shadow-xl'
       />
-      <h1 className='text-2xl font-bold text-gray-600 transition-all duration-200 hover:text-black'>
+      <h1 className='text-2xl font-bold text-gray-600 transition-all duration-200 cursor-pointer hover:text-black'>
         Google Keep
       </h1>
       <button

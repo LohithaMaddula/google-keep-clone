@@ -3,14 +3,15 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import useAuth from '../hooks/useAuth'
 import NoteCard from '../components/NoteCard'
-import Themes from '../components/Themes'
+import InputField from '../components/InputField'
+import Card from '../components/Card'
 
 function Home() {
   const auth = useAuth()
-  const [open, setOpen] = useState(false)
   const [title, setTitle] = useState('')
   const [desc, setDesc] = useState('')
   const [notes, setNotes] = useState([])
+  const [collabNotes, setCollabNotes] = useState([])
   const [theme, setTheme] = useState('white')
 
   const handleSubmit = async () => {
@@ -36,8 +37,20 @@ function Home() {
     }
   }
 
+  const fetchCollabs = async () => {
+    try {
+      if (auth) {
+        const { data } = await axios.get(`/api/collabed/${auth}`)
+        setCollabNotes(data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchNotes()
+    fetchCollabs()
     //eslint-disable-next-line
   }, [auth])
 
@@ -66,40 +79,19 @@ function Home() {
   return (
     <div className='w-full h-screen pt-3 bg-white'>
       <div className='flex justify-center'>
-        <div className='w-4/6 overflow-hidden bg-gray-100 border border-gray-200 rounded-md shadow-md'>
-          {open ? (
-            <div className={`flex flex-col justify-between gap-4 bg-${theme}`}>
-              <input
-                type='text'
-                placeholder='Title'
-                className='outline-0'
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <textarea
-                placeholder='Text'
-                className='outline-0'
-                onChange={(e) => setDesc(e.target.value)}
-              />
-              <Themes setTheme={setTheme} setOpen={setOpen} />
-              <button className='bg-red-400' onClick={() => setOpen(false)}>
-                close
-              </button>
-              <button className='bg-green-400' onClick={handleSubmit}>
-                Submit
-              </button>
-            </div>
-          ) : (
-            <>
-              <div
-                className='flex items-center h-10 ml-6 text-gray-600 cursor-text'
-                onClick={() => setOpen(true)}
-              >
-                Take a note...
-              </div>
-            </>
-          )}
-        </div>
+        <InputField
+          theme={theme}
+          setTheme={setTheme}
+          setTitle={setTitle}
+          setDesc={setDesc}
+          handleSubmit={handleSubmit}
+        />
       </div>
+      {notes.length < 1 && collabNotes.length < 1 && (
+        <div className='flex items-center justify-center flex-grow h-80'>
+          <h1 className='text-xl font-bold text-gray-500'>No notes ;)</h1>
+        </div>
+      )}
       <div className='p-3'>
         {notes.some((note) => note.isPinned) && <h2>PINNED</h2>}
         <NoteCard notes={notes} handleBin={handleBin} handlePin={handlePin} filterBy={'pinned'} />
@@ -111,6 +103,23 @@ function Home() {
           filterBy={'notes'}
           fetchNotes={fetchNotes}
         />
+        {collabNotes.length > 0 && (
+          <>
+            <h1>Collabs</h1>
+            <div className='grid flex-grow grid-cols-1 gap-4 p-4 overflow-y-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+              {collabNotes?.map((data, index) => (
+                <Card
+                  key={index}
+                  data={data}
+                  index={index}
+                  handlePin={handlePin}
+                  handleBin={handleBin}
+                  fetchNotes={fetchNotes}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 
-//model for pdf files
 const notesSchema = new mongoose.Schema(
   {
     title: String,
@@ -13,16 +12,19 @@ const notesSchema = new mongoose.Schema(
     },
     user: {
       type: String,
-      required: true
+      required: true,
+    },
+    collaborators: {
+      type: Array,
     },
     isBinned: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isPinned: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   { timestamps: true }
 )

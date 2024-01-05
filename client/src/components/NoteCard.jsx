@@ -25,6 +25,7 @@ function NoteCard({
         .filter((data) => {
           if (filterBy === 'pinned') return data.isPinned
           else if (filterBy === 'bin') return data.isBinned
+          else if (filterBy === 'collaborators') return data.isPinned
           else return !data.isPinned
         })
         .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))

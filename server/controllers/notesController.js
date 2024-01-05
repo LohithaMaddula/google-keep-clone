@@ -3,9 +3,9 @@ import notesModel from '../models/notesModel.js'
 export const createNotes = async (req, res) => {
   try {
     const { title, desc, user, theme } = req.body
-    if (!title || !desc) return res.send({message: 'Fields are required'})
+    if (!title || !desc) return res.send({ message: 'Fields are required' })
     await notesModel.create({ title, description: desc, user, theme })
-    return res.status(201).send({success: 'Created Successfully'})
+    return res.status(201).send({ success: 'Created Successfully' })
   } catch (error) {
     console.log(error)
     res.status(500).send({ error: 'Error in creating note' })
@@ -38,14 +38,13 @@ export const fetchBinNotes = async (req, res) => {
   }
 }
 
-
 export const manageNotes = async (req, res) => {
   try {
     const { noteId, action } = req.params
-    
+
     let updateValue
     let successMessage
-    
+
     if (action === 'toBin') {
       updateValue = { isBinned: true, isPinned: false }
       successMessage = 'Trashed Success'
@@ -68,7 +67,7 @@ export const deleteNotes = async (req, res) => {
   try {
     const { noteId } = req.params
     await notesModel.findByIdAndDelete(noteId)
-    return res.status(200).send({success: 'Deleted successfully'})
+    return res.status(200).send({ success: 'Deleted successfully' })
   } catch (error) {
     console.log(error)
     res.status(500).send({ error: 'Error while deleting' })
@@ -100,11 +99,11 @@ export const pinNotes = async (req, res) => {
   }
 }
 
-export const fetchNote = async(req, res) => {
+export const fetchNote = async (req, res) => {
   try {
-    const {user, noteId} = req.params
+    const { user, noteId } = req.params
     const note = await notesModel.findById(noteId)
-    if(note.user !== user) return res.send({message: 'Not yours'})
+    if (note.user !== user) return res.send({ message: 'Not created by you' })
     else return res.status(200).send(note)
   } catch (error) {
     console.log(error)
@@ -115,11 +114,25 @@ export const fetchNote = async(req, res) => {
 export const editNote = async (req, res) => {
   try {
     const { user, noteId } = req.params
-    const { title, desc, theme} = req.body
-    await notesModel.findByIdAndUpdate(noteId, {$set: {title, description: desc, theme} })
-    return res.status(200).send({success: 'Successfully updated!'})
+    const { title, desc, theme, collaborators } = req.body
+    // return console.log(collaborators)
+    await notesModel.findByIdAndUpdate(noteId, {
+      $set: { title, description: desc, theme, collaborators},
+    })
+    return res.status(200).send({ success: 'Successfully updated!' })
   } catch (error) {
     console.log(error)
     res.status(500).send({ error: 'Error on fetching note' })
+  }
+}
+
+export const fetchCollabedNotes = async (req, res) => {
+  try {
+    const { user } = req.params
+    const response = await notesModel.find({ collaborators: user })
+    return res.status(200).send(response)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ error: 'Error on fetching collabed notes' })
   }
 }
