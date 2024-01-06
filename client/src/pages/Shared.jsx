@@ -22,20 +22,20 @@ function Shared() {
   }, [])
 
   return (
-    <div className='flex flex-grow justify-center items-center'>
+    <div className='flex items-center justify-center flex-grow'>
       {shared ? (
         <div
-          className={`h-3/6 w-3/6 bg-${shared.theme} p-4 rounded-md shadow-md hover:shadow-xl border transition duration-300`}
+          className={`h-3/6 w-3/6 bg-${shared.theme} break-words p-4 rounded-md shadow-md hover:shadow-xl border transition duration-300`}
         >
-          <h1 className='text-lg font-semibold'>{shared.title}</h1>
-          <p className='text-gray-700 whitespace-pre-line'>{shared.description}</p>
+          <h1 className='overflow-auto text-lg font-semibold break-words'>{shared.title}</h1>
+          <p className='text-gray-700 break-all whitespace-pre-line'>{shared.description}</p>
         </div>
       ) : (
-        <div className='h-3/6 w-3/6 flex flex-col justify-around items-center bg-gray-100 p-4 rounded-md shadow-sm hover:shadow-xl border transition duration-300'>
+        <div className='flex flex-col items-center justify-around w-3/6 p-4 transition duration-300 bg-gray-100 border rounded-md shadow-sm h-3/6 hover:shadow-xl'>
           <h1 className='text-lg font-semibold'>Note not found!</h1>
           <p className='text-gray-700 whitespace-pre-line'>Maybe private🤔</p>
           <Link
-            className='bg-indigo-500 text-white rounded p-2 hover:scale-110 transition-all duration-300'
+            className='p-2 text-white transition-all duration-300 bg-indigo-500 rounded hover:scale-110'
             to='/'
           >
             Go Home

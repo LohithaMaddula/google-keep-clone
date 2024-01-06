@@ -57,7 +57,12 @@ function Bin() {
           <h1 className='text-xl font-bold text-gray-500'>Nothing :)</h1>
         </div>
       ) : (
-        <NoteCard notes={notes} handleDelete={handleDelete} handleRestore={handleRestore} />
+        <NoteCard
+          notes={notes}
+          handleDelete={handleDelete}
+          handleRestore={handleRestore}
+          filterBy={'pinned'}
+        />
       )}
     </>
   )

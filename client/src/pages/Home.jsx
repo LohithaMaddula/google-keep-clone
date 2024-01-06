@@ -4,7 +4,6 @@ import toast from 'react-hot-toast'
 import useAuth from '../hooks/useAuth'
 import NoteCard from '../components/NoteCard'
 import InputField from '../components/InputField'
-import Card from '../components/Card'
 
 function Home() {
   const auth = useAuth()
@@ -20,7 +19,14 @@ function Home() {
 
   const handleSubmit = async () => {
     try {
-      const { data } = await axios.post('/api/create', { title, desc, user: auth, theme, collaborators, isPublic })
+      const { data } = await axios.post('/api/create', {
+        title,
+        desc,
+        user: auth,
+        theme,
+        collaborators,
+        isPublic,
+      })
       if (data.success) toast.success(data.success)
       else toast.error(data.message)
       setAccept(!accept)
@@ -83,7 +89,7 @@ function Home() {
 
   return (
     <div className='w-full pt-3'>
-      <div className='flex justify-center'>
+      <div className='flex justify-center pt-2 pb-4'>
         <InputField
           theme={theme}
           setTheme={setTheme}
@@ -102,9 +108,9 @@ function Home() {
         </div>
       )}
       <div className='p-3'>
-        {notes.some((note) => note.isPinned) && <h2>PINNED</h2>}
+        {notes.some((note) => note.isPinned) && <h2 className='pb-3'>PINNED</h2>}
         <NoteCard notes={notes} handleBin={handleBin} handlePin={handlePin} filterBy={'pinned'} />
-        {notes.some((note) => note.isPinned) && <h1>OTHERS</h1>}
+        {notes.some((note) => note.isPinned) && <h1 className='py-3'>OTHERS</h1>}
         <NoteCard
           notes={notes}
           handleBin={handleBin}
@@ -117,19 +123,8 @@ function Home() {
         />
         {collabNotes.length > 0 && (
           <>
-            <h1>Collabs</h1>
-            <div className='grid flex-grow grid-cols-1 gap-4 p-4 overflow-y-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-              {collabNotes?.map((data, index) => (
-                <Card
-                  key={index}
-                  data={data}
-                  index={index}
-                  handlePin={handlePin}
-                  handleBin={handleBin}
-                  fetchNotes={fetchNotes}
-                />
-              ))}
-            </div>
+            <h1 className='py-3'>COLLABS</h1>
+            <NoteCard notes={collabNotes} />
           </>
         )}
       </div>

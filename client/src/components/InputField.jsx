@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import Themes from './Themes'
 import PropTypes from 'prop-types'
+import { FaCircleXmark, FaCircleCheck } from 'react-icons/fa6'
+import Checkbox from './Checkbox'
+import CollabInput from './CollabInput'
 
 function InputField({
   theme,
@@ -14,65 +17,55 @@ function InputField({
   handleSubmit,
 }) {
   const [open, setOpen] = useState(false)
-
-  const handleAdd = () => {
-    const updatedCollaborators = [...collaborators, '']
-    setCollaborators(updatedCollaborators)
-  }
-
-  const handleChange = (onChangeValue, i) => {
-    const updatedCollaborators = [...collaborators]
-    updatedCollaborators[i] = onChangeValue.target.value
-    setCollaborators(updatedCollaborators)
-  }
-
-  const handleRemove = (i) => {
-    const updatedCollaborators = [...collaborators]
-    updatedCollaborators.splice(i, 1)
-    setCollaborators(updatedCollaborators)
-  }
+  const iconSize = 30
 
   return (
-    <div className='w-4/6 overflow-hidden bg-gray-100 border border-gray-200 rounded-md shadow-md'>
+    <div
+      className='w-4/6 overflow-hidden bg-gray-50 border border-gray-200 rounded-md shadow-md'
+      title='Add note'
+    >
       {open ? (
-        <div className={`flex flex-col justify-between gap-4 bg-${theme}`}>
+        <div className={`flex flex-col justify-between p-3 gap-4 bg-${theme}`}>
           <input
             type='text'
             placeholder='Title'
-            className='outline-0'
+            className={`outline-0 text-lg bg-${theme} placeholder-gray-800`}
             onChange={(e) => setTitle(e.target.value)}
           />
           <textarea
-            placeholder='Text'
-            className='outline-0'
+            placeholder='Take a note...'
+            className={`outline-0 bg-${theme} placeholder-gray-800`}
             onChange={(e) => setDesc(e.target.value)}
+            autoFocus
           />
-          <Themes setTheme={setTheme} setOpen={setOpen} />
-          <div>
-            <button onClick={() => handleAdd()}>Add</button>
-            {collaborators.map((data, i) => {
-              return (
-                <div key={i} className='overflow-auto'>
-                  <input type='text' value={data} onChange={(e) => handleChange(e, i)} />
-                  <button onClick={() => handleRemove(i)}>X</button>
-                </div>
-              )
-            })}
-            <input type='checkbox' id='private' onChange={() => setIsPublic(!isPublic)} />
-            <label htmlFor='private'>is shared</label>
+          <CollabInput collaborators={collaborators} setCollaborators={setCollaborators} />
+          <div className='flex justify-between'>
+            <Themes setTheme={setTheme} setOpen={setOpen} />
+            <Checkbox isPublic={isPublic} setIsPublic={setIsPublic} />
+            <button
+              className='transition duration-300 hover:scale-110'
+              onClick={() => setOpen(!open)}
+              title='Close'
+            >
+              <FaCircleXmark size={iconSize} />
+            </button>
+            <button
+              className='transition duration-300 hover:scale-110'
+              onClick={() => {
+                handleSubmit()
+                setOpen(!open)
+              }}
+              title='Create'
+            >
+              <FaCircleCheck size={iconSize} />
+            </button>
           </div>
-          <button className='bg-red-400' onClick={() => setOpen(false)}>
-            close
-          </button>
-          <button className='bg-green-400' onClick={handleSubmit}>
-            Submit
-          </button>
         </div>
       ) : (
         <>
           <div
-            className='flex items-center h-10 ml-6 text-gray-600 cursor-text'
-            onClick={() => setOpen(true)}
+            className='flex items-center h-10 ml-6 text-gray-600 cursor-text transition-all duration-500'
+            onClick={() => setOpen(!open)}
           >
             Take a note...
           </div>
