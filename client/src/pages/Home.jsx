@@ -60,7 +60,7 @@ function Home() {
     fetchCollabs()
     fetchNotes()
     //eslint-disable-next-line
-  }, [auth, accept])
+  }, [auth])
 
   const handleBin = async (noteId, action) => {
     try {
