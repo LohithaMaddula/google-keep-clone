@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 
 function Shared() {
@@ -19,7 +19,7 @@ function Shared() {
     }
     return () => fetchSharedNote()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [noteId])
+  }, [])
 
   return (
     <div className='flex flex-grow justify-center items-center'>
@@ -34,6 +34,12 @@ function Shared() {
         <div className='h-3/6 w-3/6 flex flex-col justify-around items-center bg-gray-100 p-4 rounded-md shadow-sm hover:shadow-xl border transition duration-300'>
           <h1 className='text-lg font-semibold'>Note not found!</h1>
           <p className='text-gray-700 whitespace-pre-line'>Maybe private🤔</p>
+          <Link
+            className='bg-indigo-500 text-white rounded p-2 hover:scale-110 transition-all duration-300'
+            to='/'
+          >
+            Go Home
+          </Link>
         </div>
       )}
     </div>

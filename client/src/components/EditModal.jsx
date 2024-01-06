@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 import Themes from './Themes'
 import useAuth from '../hooks/useAuth'
 
-function EditModal({ note, fetchNotes, setModal }) {
+function EditModal({ note, setModal, accept, setAccept }) {
   const [title, setTitle] = useState(note.title)
   const [desc, setDesc] = useState(note.description)
   const [theme, setTheme] = useState(note.theme)
@@ -34,13 +34,13 @@ function EditModal({ note, fetchNotes, setModal }) {
         user,
         theme,
         collaborators,
-        isPublic
+        isPublic,
       })
       if (data.success) {
         toast.success(data.success)
-        fetchNotes()
         setModal(false)
-      } else toast.error(data.message)
+        setAccept(!accept)
+      }
     } catch (error) {
       console.error(error)
     }
@@ -92,8 +92,13 @@ function EditModal({ note, fetchNotes, setModal }) {
                 </div>
               )
             })}
-            <input type='checkbox' id='private' onChange={() => setIsPublic(!isPublic)} checked={isPublic} />
-            <label htmlFor="private">is shared</label>
+            <input
+              type='checkbox'
+              id='private'
+              onChange={() => setIsPublic(!isPublic)}
+              checked={isPublic}
+            />
+            <label htmlFor='private'>is shared</label>
           </div>
         )}
         <button className='bg-red-400' onClick={() => setModal(false)}>
@@ -110,8 +115,10 @@ function EditModal({ note, fetchNotes, setModal }) {
 
 EditModal.propTypes = {
   note: PropTypes.object,
-  fetchNotes: PropTypes.func,
+  // fetchNotes: PropTypes.func,
   setModal: PropTypes.func,
+  accept: PropTypes.bool,
+  setAccept: PropTypes.func,
 }
 
 export default EditModal

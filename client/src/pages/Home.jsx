@@ -13,13 +13,17 @@ function Home() {
   const [notes, setNotes] = useState([])
   const [collabNotes, setCollabNotes] = useState([])
   const [theme, setTheme] = useState('white')
+  const [collaborators, setCollaborators] = useState([])
+  const [isPublic, setIsPublic] = useState(false)
+  const [accept, setAccept] = useState(false)
+  const hello = 'hello'
 
   const handleSubmit = async () => {
     try {
-      const { data } = await axios.post('/api/create', { title, desc, user: auth, theme })
+      const { data } = await axios.post('/api/create', { title, desc, user: auth, theme, collaborators, isPublic })
       if (data.success) toast.success(data.success)
       else toast.error(data.message)
-      fetchNotes()
+      setAccept(!accept)
     } catch (error) {
       toast.error(error.response.data.error)
       console.error(error)
@@ -49,17 +53,18 @@ function Home() {
   }
 
   useEffect(() => {
-    fetchNotes()
     fetchCollabs()
+    fetchNotes()
+    // console.count(accept)
     //eslint-disable-next-line
-  }, [auth])
+  }, [auth, accept])
 
   const handleBin = async (noteId, action) => {
     try {
       const { data } = await axios.patch(`/api/manage/${noteId}/${action}`)
       if (data.success) toast.success(data.success)
       else toast.error(data.message)
-      fetchNotes()
+      setAccept(!accept)
     } catch (error) {
       console.error(error)
     }
@@ -70,14 +75,14 @@ function Home() {
       const { data } = await axios.patch(`/api/pin/${noteId}/${action}`)
       if (data.success) toast.success(data.success)
       else toast.error(data.message)
-      fetchNotes()
+      setAccept(!accept)
     } catch (error) {
       console.error(error)
     }
   }
 
   return (
-    <div className='w-full h-screen pt-3'>
+    <div className='w-full pt-3'>
       <div className='flex justify-center'>
         <InputField
           theme={theme}
@@ -85,6 +90,10 @@ function Home() {
           setTitle={setTitle}
           setDesc={setDesc}
           handleSubmit={handleSubmit}
+          collaborators={collaborators}
+          setCollaborators={setCollaborators}
+          isPublic={isPublic}
+          setIsPublic={setIsPublic}
         />
       </div>
       {notes.length < 1 && collabNotes.length < 1 && (
@@ -101,7 +110,10 @@ function Home() {
           handleBin={handleBin}
           handlePin={handlePin}
           filterBy={'notes'}
-          fetchNotes={fetchNotes}
+          // fetchNotes={fetchNotes}
+          accept={accept}
+          setAccept={setAccept}
+          hello={hello}
         />
         {collabNotes.length > 0 && (
           <>

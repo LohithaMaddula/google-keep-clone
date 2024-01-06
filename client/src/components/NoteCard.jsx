@@ -14,7 +14,9 @@ function NoteCard({
   handlePin,
   handleDelete,
   handleRestore,
-  fetchNotes,
+  // fetchNotes,
+  accept,
+  setAccept,
 }) {
   const [modal, setModal] = useState(false)
   const [modalNoteId, setModalNoteId] = useState(null)
@@ -27,7 +29,6 @@ function NoteCard({
     } catch (error) {
       console.error(error)
     }
-
   }
 
   return (
@@ -97,7 +98,13 @@ function NoteCard({
               )}
             </div>
             {modal && modalNoteId === data._id && (
-              <EditModal note={data} fetchNotes={fetchNotes} setModal={setModal} />
+              <EditModal
+                note={data}
+                // fetchNotes={fetchNotes}
+                accept={accept}
+                setAccept={setAccept}
+                setModal={setModal}
+              />
             )}
           </div>
         ))}
@@ -112,7 +119,9 @@ NoteCard.propTypes = {
   handlePin: PropTypes.func,
   handleDelete: PropTypes.func,
   handleRestore: PropTypes.func,
-  fetchNotes: PropTypes.func,
+  // fetchNotes: PropTypes.func,
+  accept: PropTypes.bool,
+  setAccept: PropTypes.func,
 }
 
 export default NoteCard

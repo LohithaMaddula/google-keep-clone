@@ -3,9 +3,9 @@ import mongoose from 'mongoose'
 
 export const createNotes = async (req, res) => {
   try {
-    const { title, desc, user, theme } = req.body
+    const { title, desc, user, theme, collaborators, isPublic } = req.body
     if (!title || !desc) return res.send({ message: 'Fields are required' })
-    await notesModel.create({ title, description: desc, user, theme })
+    await notesModel.create({ title, description: desc, user, theme, collaborators, isPublic })
     return res.status(201).send({ success: 'Created Successfully' })
   } catch (error) {
     console.log(error)
@@ -150,7 +150,7 @@ export const fetchSharedNote = async (req, res) => {
       return res.status(404).send({ message: 'Note not found' })
     }
     if (note.isPublic === false) {
-      return res.send({ message: 'This is a private note' })
+      return res.status(404).send({ message: 'This is a private note' })
     }
     return res.status(200).send(note)
   } catch (error) {
