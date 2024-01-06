@@ -49,11 +49,13 @@ function Bin() {
   }, 1000)
 
   return (
-    <>
+    <div className='flex-grow p-4'>
       {loading ? (
-        <Loading />
+        <div className='flex items-center h-full'>
+          <Loading />
+        </div>
       ) : notes.length < 1 ? (
-        <div className='flex items-center justify-center flex-grow transition duration-300'>
+        <div className='flex items-center justify-center h-full transition duration-300'>
           <h1 className='text-xl font-bold text-gray-500'>Nothing :)</h1>
         </div>
       ) : (
@@ -61,10 +63,10 @@ function Bin() {
           notes={notes}
           handleDelete={handleDelete}
           handleRestore={handleRestore}
-          filterBy={'pinned'}
+          filterBy={'bin'}
         />
       )}
-    </>
+    </div>
   )
 }
 

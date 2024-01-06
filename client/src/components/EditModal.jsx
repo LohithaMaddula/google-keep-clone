@@ -4,14 +4,18 @@ import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
 import Themes from './Themes'
 import useAuth from '../hooks/useAuth'
+import { FaCircleCheck, FaCircleXmark } from 'react-icons/fa6'
+import Checkbox from './Checkbox'
+import CollabInput from './CollabInput'
 
-function EditModal({ note, setModal, accept, setAccept }) {
+function EditModal({ note, setModal, fetchNotes }) {
   const [title, setTitle] = useState(note.title)
   const [desc, setDesc] = useState(note.description)
   const [theme, setTheme] = useState(note.theme)
   const [collaborators, setCollaborators] = useState(note.collaborators)
   const [isPublic, setIsPublic] = useState(note.isPublic)
   const auth = useAuth()
+  const iconSize = 32
 
   const handleEdit = async () => {
     try {
@@ -39,75 +43,51 @@ function EditModal({ note, setModal, accept, setAccept }) {
       if (data.success) {
         toast.success(data.success)
         setModal(false)
-        setAccept(!accept)
+        fetchNotes()
       }
     } catch (error) {
       console.error(error)
     }
   }
 
-  const handleAdd = () => {
-    const updatedCollaborators = [...collaborators, '']
-    setCollaborators(updatedCollaborators)
-  }
-
-  const handleChange = (onChangeValue, i) => {
-    const updatedCollaborators = [...collaborators]
-    updatedCollaborators[i] = onChangeValue.target.value
-    setCollaborators(updatedCollaborators)
-  }
-
-  const handleRemove = (i) => {
-    const updatedCollaborators = [...collaborators]
-    updatedCollaborators.splice(i, 1)
-    setCollaborators(updatedCollaborators)
-  }
-
   return (
-    <div>
-      <div className={`flex flex-col justify-between gap-4 p-2 mt-2 bg-${theme}`}>
-        <input
-          type='text'
-          placeholder='Title'
-          className='outline-0'
-          name='title'
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <textarea
-          placeholder='Text'
-          className='outline-0'
-          name='desc'
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-        />
-        {note.user === auth && (
-          <div>
-            <button onClick={() => handleAdd()}>Add</button>
-            {collaborators.map((data, i) => {
-              return (
-                <div key={i} className='overflow-auto'>
-                  <input type='text' value={data} onChange={(e) => handleChange(e, i)} />
-                  <button onClick={() => handleRemove(i)}>X</button>
-                </div>
-              )
-            })}
-            <input
-              type='checkbox'
-              id='private'
-              onChange={() => setIsPublic(!isPublic)}
-              checked={isPublic}
-            />
-            <label htmlFor='private'>is shared</label>
-          </div>
-        )}
-        <button className='bg-red-400' onClick={() => setModal(false)}>
-          close
+    <div className={`flex flex-col justify-between p-4 gap-4 bg-${theme}`}>
+      <input
+        type='text'
+        placeholder='Title'
+        className={`outline-0 text-lg bg-${theme} placeholder-gray-800`}
+        onChange={(e) => setTitle(e.target.value)}
+        value={title}
+      />
+      <textarea
+        placeholder='Take a note...'
+        className={`outline-0 bg-${theme} placeholder-gray-800`}
+        onChange={(e) => setDesc(e.target.value)}
+        value={desc}
+      />
+      {note.user === auth && (
+        <CollabInput collaborators={collaborators} setCollaborators={setCollaborators} />
+      )}
+      <Themes setTheme={setTheme} />
+      <div className='flex justify-between'>
+        <button
+          className='transition duration-300 hover:scale-110'
+          onClick={() => setModal(false)}
+          title='Close'
+        >
+          <FaCircleXmark size={iconSize} />
         </button>
-        <button className='bg-green-400' onClick={() => handleEdit()}>
-          Edit
+        <Checkbox isPublic={isPublic} setIsPublic={setIsPublic} />
+        <button
+          className='transition duration-300 hover:scale-110'
+          onClick={() => {
+            handleEdit()
+            setModal(false)
+          }}
+          title='Create'
+        >
+          <FaCircleCheck size={iconSize} />
         </button>
-        <Themes setTheme={setTheme} />
       </div>
     </div>
   )
@@ -115,10 +95,8 @@ function EditModal({ note, setModal, accept, setAccept }) {
 
 EditModal.propTypes = {
   note: PropTypes.object,
-  // fetchNotes: PropTypes.func,
+  fetchNotes: PropTypes.func,
   setModal: PropTypes.func,
-  accept: PropTypes.bool,
-  setAccept: PropTypes.func,
 }
 
 export default EditModal

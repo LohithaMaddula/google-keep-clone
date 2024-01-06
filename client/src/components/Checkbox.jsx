@@ -12,7 +12,7 @@ function Checkbox({ isPublic, setIsPublic }) {
       />
       <label
         htmlFor='choose-me'
-        className={`hover:scale-110 p-1.5 select-none cursor-pointer rounded-full border-2 bg-gray-300 border-gray-800 font-bold text-gray-800 transition-all duration-200 ease-in-out ${
+        className={`hover:scale-110 p-2 select-none cursor-pointer rounded-full border-2 bg-gray-300 border-gray-800 font-bold text-gray-800 transition-all duration-200 ease-in-out ${
           isPublic
             ? 'peer-checked:bg-gray-200 peer-checked:text-gray-900 peer-checked:border-gray-800'
             : ''

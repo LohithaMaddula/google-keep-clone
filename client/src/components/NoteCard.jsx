@@ -9,9 +9,7 @@ function NoteCard({
   handlePin,
   handleDelete,
   handleRestore,
-  // fetchNotes,
-  // accept,
-  // setAccept,
+  fetchNotes,
 }) {
   return (
     <ResponsiveMasonry columnsCountBreakPoints={{ 250: 1, 550: 2, 850: 3, 1050: 4 }}>
@@ -30,7 +28,7 @@ function NoteCard({
               data={data}
               handlePin={handlePin}
               handleBin={handleBin}
-              // fetchNotes={fetchNotes}
+              fetchNotes={fetchNotes}
               handleRestore={handleRestore}
               handleDelete={handleDelete}
             />
@@ -47,9 +45,7 @@ NoteCard.propTypes = {
   handlePin: PropTypes.func,
   handleDelete: PropTypes.func,
   handleRestore: PropTypes.func,
-  // fetchNotes: PropTypes.func,
-  accept: PropTypes.bool,
-  setAccept: PropTypes.func,
+  fetchNotes: PropTypes.func,
 }
 
 export default NoteCard

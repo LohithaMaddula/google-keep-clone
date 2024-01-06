@@ -25,10 +25,17 @@ function Shared() {
     <div className='flex items-center justify-center flex-grow'>
       {shared ? (
         <div
-          className={`h-3/6 w-3/6 bg-${shared.theme} break-words p-4 rounded-md shadow-md hover:shadow-xl border transition duration-300`}
+          className={`flex flex-col bg-${shared.theme} justify-between w-3/6 p-4 overflow-auto break-words transition duration-300 border rounded-md shadow-md group h-3/6 hover:shadow-xl`}
         >
-          <h1 className='overflow-auto text-lg font-semibold break-words'>{shared.title}</h1>
-          <p className='text-gray-700 break-all whitespace-pre-line'>{shared.description}</p>
+          <div>
+            <h1 className='overflow-auto text-lg font-semibold break-words'>{shared.title}</h1>
+            <p className='text-gray-700 break-all whitespace-pre-line'>{shared.description}</p>
+          </div>
+          <div>
+            <p className='text-xs text-gray-900 transition duration-300 opacity-0 group-hover:opacity-100'>
+              *created by {shared.user}
+            </p>
+          </div>
         </div>
       ) : (
         <div className='flex flex-col items-center justify-around w-3/6 p-4 transition duration-300 bg-gray-100 border rounded-md shadow-sm h-3/6 hover:shadow-xl'>

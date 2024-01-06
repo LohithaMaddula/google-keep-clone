@@ -17,11 +17,11 @@ function InputField({
   handleSubmit,
 }) {
   const [open, setOpen] = useState(false)
-  const iconSize = 30
+  const iconSize = 32
 
   return (
     <div
-      className='w-4/6 overflow-hidden bg-gray-50 border border-gray-200 rounded-md shadow-md'
+      className='w-4/6 overflow-hidden border border-gray-200 rounded-md shadow-md bg-gray-50'
       title='Add note'
     >
       {open ? (
@@ -38,10 +38,13 @@ function InputField({
             onChange={(e) => setDesc(e.target.value)}
             autoFocus
           />
-          <CollabInput collaborators={collaborators} setCollaborators={setCollaborators} />
-          <div className='flex justify-between'>
+          <CollabInput
+            collaborators={collaborators}
+            setCollaborators={setCollaborators}
+            isInput={true}
+          />
+          <div className='flex justify-between gap-1'>
             <Themes setTheme={setTheme} setOpen={setOpen} />
-            <Checkbox isPublic={isPublic} setIsPublic={setIsPublic} />
             <button
               className='transition duration-300 hover:scale-110'
               onClick={() => setOpen(!open)}
@@ -49,6 +52,7 @@ function InputField({
             >
               <FaCircleXmark size={iconSize} />
             </button>
+            <Checkbox isPublic={isPublic} setIsPublic={setIsPublic} />
             <button
               className='transition duration-300 hover:scale-110'
               onClick={() => {
@@ -64,7 +68,7 @@ function InputField({
       ) : (
         <>
           <div
-            className='flex items-center h-10 ml-6 text-gray-600 cursor-text transition-all duration-500'
+            className='flex items-center h-10 ml-6 text-gray-600 transition-all duration-500 cursor-text'
             onClick={() => setOpen(!open)}
           >
             Take a note...

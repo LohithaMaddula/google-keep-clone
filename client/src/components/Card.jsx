@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import useAuth from '../hooks/useAuth'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
+import Modal from './Modal'
 
 function Card({ data, index, handlePin, handleBin, fetchNotes, handleRestore, handleDelete }) {
   const iconSize = 20
@@ -83,9 +84,12 @@ function Card({ data, index, handlePin, handleBin, fetchNotes, handleRestore, ha
               </>
             )}
           </div>
-          {modal && modalNoteId === data._id && (
+          {/* {modal && modalNoteId === data._id && (
+               <EditModal note={data} fetchNotes={fetchNotes} setModal={setModal} />
+          )} */}
+          <Modal modal={modal && modalNoteId === data._id} setModal={setModal}>
             <EditModal note={data} fetchNotes={fetchNotes} setModal={setModal} />
-          )}
+          </Modal>
         </div>
       ) : (
         <div

@@ -14,8 +14,6 @@ function Home() {
   const [theme, setTheme] = useState('white')
   const [collaborators, setCollaborators] = useState([])
   const [isPublic, setIsPublic] = useState(false)
-  const [accept, setAccept] = useState(false)
-  const hello = 'hello'
 
   const handleSubmit = async () => {
     try {
@@ -29,7 +27,7 @@ function Home() {
       })
       if (data.success) toast.success(data.success)
       else toast.error(data.message)
-      setAccept(!accept)
+      fetchNotes()
     } catch (error) {
       toast.error(error.response.data.error)
       console.error(error)
@@ -61,7 +59,6 @@ function Home() {
   useEffect(() => {
     fetchCollabs()
     fetchNotes()
-    // console.count(accept)
     //eslint-disable-next-line
   }, [auth, accept])
 
@@ -70,7 +67,7 @@ function Home() {
       const { data } = await axios.patch(`/api/manage/${noteId}/${action}`)
       if (data.success) toast.success(data.success)
       else toast.error(data.message)
-      setAccept(!accept)
+      fetchNotes()
     } catch (error) {
       console.error(error)
     }
@@ -81,7 +78,7 @@ function Home() {
       const { data } = await axios.patch(`/api/pin/${noteId}/${action}`)
       if (data.success) toast.success(data.success)
       else toast.error(data.message)
-      setAccept(!accept)
+      fetchNotes()
     } catch (error) {
       console.error(error)
     }
@@ -116,10 +113,7 @@ function Home() {
           handleBin={handleBin}
           handlePin={handlePin}
           filterBy={'notes'}
-          // fetchNotes={fetchNotes}
-          accept={accept}
-          setAccept={setAccept}
-          hello={hello}
+          fetchNotes={fetchNotes}
         />
         {collabNotes.length > 0 && (
           <>
