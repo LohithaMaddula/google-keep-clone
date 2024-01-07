@@ -6,6 +6,7 @@ import Layout from './pages/Layout'
 import axios from 'axios'
 import { Toaster } from 'react-hot-toast'
 import Shared from './pages/Shared'
+import Reminders from './pages/Reminders'
 
 axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL
 // axios.defaults.withCredentials = true
@@ -28,6 +29,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path='/bin' element={<Bin />} />
           <Route path='/shared/:noteId' element={<Shared />} />
+          <Route path='/reminders' element={<Reminders />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>
