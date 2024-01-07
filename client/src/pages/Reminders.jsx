@@ -1,6 +1,11 @@
+
 function Reminders() {
+
   return (
-    <div>Reminders</div>
+    <div>
+      <h1>Reminders</h1>
+      <button onClick={() => Notification.requestPermission()}>noti permission check</button>
+    </div>
   )
 }
 

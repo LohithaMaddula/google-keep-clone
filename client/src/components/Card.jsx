@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { FaCopy, FaEdit, FaTrash, FaTrashRestore } from 'react-icons/fa'
+import { FaBell, FaCopy, FaEdit, FaTrash, FaTrashRestore } from 'react-icons/fa'
 import { RiUnpinFill } from 'react-icons/ri'
 import { TbPinnedFilled } from 'react-icons/tb'
 import EditModal from './EditModal'
@@ -8,11 +8,13 @@ import useAuth from '../hooks/useAuth'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import Modal from './Modal'
+import TimePicker from './TimePicker'
 
 function Card({ data, index, handlePin, handleBin, fetchNotes, handleRestore, handleDelete }) {
   const iconSize = 20
   const auth = useAuth()
   const [modal, setModal] = useState(false)
+  const [timeModal, setTimeModal] = useState(false)
   const [modalNoteId, setModalNoteId] = useState(null)
 
   const handleCopyLink = async (id) => {
@@ -21,6 +23,16 @@ function Card({ data, index, handlePin, handleBin, fetchNotes, handleRestore, ha
       toast.success('Link copied to clipboard')
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const handleSetReminder = async (id) => {
+    try {
+      console.log(id)
+      setTimeModal(!timeModal)
+      console.log(timeModal)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -53,6 +65,11 @@ function Card({ data, index, handlePin, handleBin, fetchNotes, handleRestore, ha
             <p className='text-xs transition-all duration-300 opacity-0 group-hover:opacity-100'>
               Edited {moment(data.updatedAt).fromNow()}
             </p>
+
+            <button onClick={() => handleSetReminder(data._id)}>
+              <FaBell />
+            </button>
+
             {data.isBinned ? (
               <>
                 <button className='' onClick={() => handleDelete(data._id)}>
@@ -87,6 +104,9 @@ function Card({ data, index, handlePin, handleBin, fetchNotes, handleRestore, ha
           {/* {modal && modalNoteId === data._id && (
                <EditModal note={data} fetchNotes={fetchNotes} setModal={setModal} />
           )} */}
+          <Modal modal={timeModal} setModal={setTimeModal}>
+            <TimePicker setModal={setTimeModal} note={data} />
+          </Modal>
           <Modal modal={modal && modalNoteId === data._id} setModal={setModal}>
             <EditModal note={data} fetchNotes={fetchNotes} setModal={setModal} />
           </Modal>
@@ -117,9 +137,9 @@ function Card({ data, index, handlePin, handleBin, fetchNotes, handleRestore, ha
               <FaEdit />
             </button>
           </div>
-          {modal && modalNoteId === data._id && (
+          <Modal modal={modal && modalNoteId === data._id} setModal={setModal}>
             <EditModal note={data} fetchNotes={fetchNotes} setModal={setModal} />
-          )}
+          </Modal>
         </div>
       )}
     </>
