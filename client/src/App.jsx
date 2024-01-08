@@ -7,11 +7,14 @@ import axios from 'axios'
 import { Toaster } from 'react-hot-toast'
 import Shared from './pages/Shared'
 import Reminders from './pages/Reminders'
+import useReminder from './hooks/useReminder'
 
 axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL
 // axios.defaults.withCredentials = true
 
 function App() {
+  useReminder()
+
   return (
     <>
       <Toaster

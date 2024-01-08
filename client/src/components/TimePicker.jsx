@@ -1,37 +1,16 @@
 import { useState } from 'react'
+import useReminder from '../hooks/useReminder'
 import toast from 'react-hot-toast'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 
-function TimePicker({ setModal, note }) {
-
+function TimePicker({ note, setModal, fetchNotes }) {
   const [time, setTime] = useState('')
-  const title = note.title.substring(0, 20) + (note.title.length > 20 ? '...' : '')
-  const desc = note.description.substring(0, 40) + (note.description.length > 40 ? '...' : '')
+  const { fetchReminders } = useReminder()
 
-  const handleNotification = async () => {
+  const handleSubmit = async () => {
     try {
-      const permission = await Notification.requestPermission()
-      if (permission === 'granted') {
-        const notification = new Notification(title, {
-          body: desc,
-          icon: 'keep.png',
-        })
-
-        notification.onclick = function () {
-          window.location.href = `${import.meta.env.VITE_CLIENT_URL}/reminders` // Redirects in the current tab/window
-        }
-      } else {
-        toast.error('Some error occurred')
-        console.log('This browser does not support notifications.')
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const handleSubmit = () => {
-    try {
-      // Assuming the input is in the format HH:mm
+      const noteId = note._id
       const [hours, minutes] = time.split(':')
       const currentTime = new Date()
       const notificationTime = new Date(
@@ -46,18 +25,33 @@ function TimePicker({ setModal, note }) {
       const timeDifference = notificationTime - currentTime
 
       if (timeDifference > 0) {
-        toast.success(`Set a reminder on ${time}`)
+        await axios.put(`/api/setReminder/${noteId}`, { timestamp: notificationTime })
         setModal(false)
-        setTimeout(() => {
-          toast.success('You have a reminder!')
-          handleNotification()
-        }, timeDifference)
+        handleLocalStorage(noteId, notificationTime)
+        toast.success(`Setting a reminder on ${time}`)
+        fetchReminders()
+        fetchNotes()
       } else {
-        toast.error('Invalid time!')
-        console.error('Invalid time')
+         toast.error('Invalid time!')
+         console.error('Invalid time')
       }
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  const handleLocalStorage = async (noteId, notificationTime) => {
+    try {
+      const existingRemindersString = localStorage.getItem('reminders')
+      const existingReminders = existingRemindersString ? JSON.parse(existingRemindersString) : []
+      // Add the new reminder to the existing reminders
+      const newReminderData = { noteId: noteId, notificationTime: notificationTime }
+      const updatedReminders = [...existingReminders, newReminderData]
+      // Store the updated reminders back in localStorage
+      localStorage.setItem('reminders', JSON.stringify(updatedReminders))
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -78,6 +72,7 @@ function TimePicker({ setModal, note }) {
 TimePicker.propTypes = {
   setModal: PropTypes.func.isRequired,
   note: PropTypes.object.isRequired,
+  fetchNotes: PropTypes.func,
 }
 
 export default TimePicker

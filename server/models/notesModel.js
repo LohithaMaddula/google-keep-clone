@@ -17,6 +17,7 @@ const notesSchema = new mongoose.Schema(
     collaborators: {
       type: Array,
     },
+    reminder: Date,
     isBinned: {
       type: Boolean,
       default: false,
