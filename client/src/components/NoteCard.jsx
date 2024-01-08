@@ -19,7 +19,8 @@ function NoteCard({
             if (filterBy === 'pinned') return data.isPinned
             else if (filterBy === 'bin') return data.isBinned
             else if (filterBy === 'collaborators') return data.isPinned
-            else return !data.isPinned
+            else if (filterBy === 'notes') return !data.isPinned
+            else return data
           })
           .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
           .map((data, index) => (
@@ -31,6 +32,7 @@ function NoteCard({
               fetchNotes={fetchNotes}
               handleRestore={handleRestore}
               handleDelete={handleDelete}
+              filterBy={filterBy}
             />
           ))}
       </Masonry>

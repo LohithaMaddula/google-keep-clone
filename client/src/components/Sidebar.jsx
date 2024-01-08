@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { FaRegLightbulb } from 'react-icons/fa'
+import { FaBell, FaRegLightbulb } from 'react-icons/fa'
 import { FaRegTrashAlt } from 'react-icons/fa'
 
 function Sidebar() {
@@ -17,6 +17,18 @@ function Sidebar() {
           title='Notes'
         >
           <FaRegLightbulb size={iconSize} />
+          {/* <span className=''>Notes</span> */}
+        </NavLink>
+        <NavLink
+          to='/reminders'
+          className={({ isActive }) =>
+            `p-3 transition-all duration-300 hover:scale-105 rounded-full ${
+              isActive ? 'bg-yellow-200' : ''
+            }`
+          }
+          title='Notes'
+        >
+          <FaBell size={iconSize} />
           {/* <span className=''>Notes</span> */}
         </NavLink>
         <NavLink

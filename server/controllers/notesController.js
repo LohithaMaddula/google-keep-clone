@@ -158,3 +158,27 @@ export const fetchSharedNote = async (req, res) => {
     res.status(500).send({ error: 'Error while fetching shared note' })
   }
 }
+
+export const setReminder = async (req, res) => {
+  try {
+    const { noteId } = req.params
+    const { timestamp } = req.body
+    console.log(noteId, timestamp)
+    await notesModel.findByIdAndUpdate(noteId, {reminder: timestamp})
+    return res.status(200).send({message: 'Set reminder successfully'})
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ error: 'Error while setting reminder' })
+  }
+}
+
+export const deleteReminder = async (req, res) => {
+  try {
+    const { noteId } = req.params
+    await notesModel.findByIdAndUpdate(noteId, { $unset: { reminder: 1 } })
+    return res.status(200).send({ message: 'Reminder deleted successfully' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).send({ error: 'Error while deleting reminder' })
+  }
+}
