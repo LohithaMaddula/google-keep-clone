@@ -6,7 +6,7 @@ import axios from 'axios'
 
 function TimePicker({ note, setModal, fetchNotes }) {
   const [time, setTime] = useState('')
-  const { fetchReminders } = useReminder()
+  const { triggerElement } = useReminder()
 
   const handleSubmit = async () => {
     try {
@@ -29,11 +29,11 @@ function TimePicker({ note, setModal, fetchNotes }) {
         setModal(false)
         handleLocalStorage(noteId, notificationTime)
         toast.success(`Setting a reminder on ${time}`)
-        fetchReminders()
+        triggerElement()
         fetchNotes()
       } else {
-         toast.error('Invalid time!')
-         console.error('Invalid time')
+        toast.error('Invalid time!')
+        console.error('Invalid time')
       }
     } catch (error) {
       console.error(error)
@@ -56,12 +56,12 @@ function TimePicker({ note, setModal, fetchNotes }) {
   }
 
   return (
-    <div className='flex flex-col justify-between p-4 gap-4 bg-white'>
+    <div className='flex flex-col justify-between gap-4 p-4 bg-white'>
       <h1>Set your time</h1>
       <input type='time' onChange={(e) => setTime(e.target.value)} className='text-xl' />
       <button
         onClick={() => handleSubmit()}
-        className='p-1 bg-violet-300 hover:bg-violet-400 rounded transition duration-300'
+        className='p-1 transition duration-300 rounded bg-violet-300 hover:bg-violet-400'
       >
         Set Reminder
       </button>

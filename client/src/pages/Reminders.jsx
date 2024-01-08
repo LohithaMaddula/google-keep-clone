@@ -6,7 +6,7 @@ import NoteCard from '../components/NoteCard'
 function Reminders() {
   const auth = useAuth()
   const [notes, setNotes] = useState([])
-  const reminders = JSON.parse(localStorage.getItem('reminders')) || []
+  const reminders = JSON.parse(localStorage.getItem('reminders'))
   const [filteredNotes, setFilteredNotes] = useState([])
 
   const fetchNotes = async () => {
@@ -29,21 +29,21 @@ function Reminders() {
 
   useEffect(() => {
     fetchNotes()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth, reminders])
+    // eslint-disable-next-line
+  }, [auth])
 
   useEffect(() => {
     filterNotes()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [notes])
 
   return (
     <div className='w-full pt-4 p-2'>
-      {filterNotes.length == 0 ? (
+      {filterNotes.length === 0 ? (
         <div className='flex items-center justify-center h-full transition duration-300'>
           <h1 className='text-xl font-bold text-gray-500'>No Reminders for now!</h1>
         </div>
-      ) : (
+        ) : (
         <NoteCard notes={filteredNotes} fetchNotes={fetchNotes} filterBy={'reminder'} />
       )}
     </div>

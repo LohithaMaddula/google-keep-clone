@@ -6,14 +6,38 @@ import useAuth from './useAuth'
 function useReminder() {
   const auth = useAuth()
   const [reminders, setReminders] = useState([])
-  // const [timeoutId, setTimeoutId] = useState([])
+  const [trigger, setTrigger] = useState(false)
+
+  const triggerElement = () => {
+    setTrigger(!trigger)
+  }
 
   const fetchReminders = async () => {
     try {
       const storedReminders = localStorage.getItem('reminders')
       if (storedReminders) {
         const parsedReminders = await JSON.parse(storedReminders)
-        setReminders(parsedReminders)
+        const currentTimestamp = new Date().getTime()
+        const filteredReminders = parsedReminders.filter(
+          (reminder) => new Date(reminder.notificationTime).getTime() > currentTimestamp
+        )
+        // Update state with filtered reminders
+        setReminders(filteredReminders)
+        // Update local storage with filtered reminders
+        localStorage.setItem('reminders', JSON.stringify(filteredReminders))
+        const remindersToDelete = parsedReminders.filter(
+          (reminder) => new Date(reminder.notificationTime).getTime() <= currentTimestamp
+        )
+        // Delete each reminder from the server
+        await Promise.all(
+          remindersToDelete.map(async (reminder) => {
+            try {
+              await axios.delete(`/api/deleteReminder/${reminder.noteId}`)
+            } catch (error) {
+              console.error(`Failed to delete reminder with noteId ${reminder.noteId}`, error)
+            }
+          })
+        )
       }
     } catch (error) {
       console.log(error)
@@ -87,16 +111,13 @@ function useReminder() {
               handleNotification(data.title, data.description)
               await handleDeleteReminder(noteId)
             }, timeDifference)
-            // setTimeoutId((prevTimeoutIds) => [...prevTimeoutIds, timeout])
+
             const reminderWithTimeout = { ...reminder, timeout }
             const storedReminders = JSON.parse(localStorage.getItem('reminders')) || []
-
             // Remove the old reminder from local storage
             const updatedReminders = storedReminders.filter((r) => r.noteId !== reminder.noteId)
-
             // Add the reminder with timeout to the array
             const newReminders = [...updatedReminders, reminderWithTimeout]
-
             localStorage.setItem('reminders', JSON.stringify(newReminders))
           } else {
             toast.error('Invalid time!')
@@ -110,14 +131,22 @@ function useReminder() {
 
     pushNotifications()
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      reminders.forEach((reminder) => {
+        clearTimeout(reminder.timeout)
+      })
+    }
+    // eslint-disable-next-line
   }, [reminders, auth])
 
   useEffect(() => {
-    fetchReminders()
-  }, [])
+    return () => {
+      // console.count('count')
+      fetchReminders()
+    }
+  }, [trigger])
 
-  return { fetchReminders }
+  return { fetchReminders, triggerElement }
 }
 
 export default useReminder

@@ -1,4 +1,3 @@
-import useReminder from '../hooks/useReminder'
 import moment from 'moment'
 import { FaBell, FaBellSlash, FaCopy, FaEdit, FaTrash, FaTrashRestore } from 'react-icons/fa'
 import { RiUnpinFill } from 'react-icons/ri'
@@ -23,7 +22,6 @@ function Card({
   filterBy,
 }) {
   const auth = useAuth()
-  const { fetchReminders } = useReminder()
   const iconSize = 20
   const [modal, setModal] = useState(false)
   const [timeModal, setTimeModal] = useState(false)
@@ -49,42 +47,22 @@ function Card({
     }
   }
 
-  // const handleRemoveLocalStorage = async (noteId) => {
-  //   try {
-  //     const existingRemindersString = localStorage.getItem('reminders')
-  //     let existingReminders = existingRemindersString ? JSON.parse(existingRemindersString) : []
-  //     existingReminders = existingReminders.filter((reminder) => reminder.noteId !== noteId)
-  //     localStorage.setItem('reminders', JSON.stringify(existingReminders))
-  //     await fetchReminders()
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
   const handleRemoveLocalStorage = async (noteId) => {
     try {
       const existingRemindersString = localStorage.getItem('reminders')
       let existingReminders = existingRemindersString ? JSON.parse(existingRemindersString) : []
-
       // Find the reminder with the specified noteId
       const reminderToRemove = existingReminders.find((reminder) => reminder.noteId === noteId)
-
       if (reminderToRemove) {
         // Fetch the timeout field
         const { timeout } = reminderToRemove
-
         // Remove the reminder from the array
         existingReminders = existingReminders.filter((reminder) => reminder.noteId !== noteId)
-
         // Update local storage
         localStorage.setItem('reminders', JSON.stringify(existingReminders))
-
         // Use the 'timeout' value as needed
         console.log('Timeout for noteId', noteId, ':', timeout)
-
         clearTimeout(timeout)
-
-        // Example: Fetch reminders after removal
-        await fetchReminders()
       } else {
         console.warn('Reminder with noteId', noteId, 'not found in local storage')
       }
@@ -92,7 +70,6 @@ function Card({
       console.error(error)
     }
   }
-
 
   return (
     <>
