@@ -77,7 +77,7 @@ function EditModal({ note, setModal, fetchNotes }) {
         >
           <FaCircleXmark size={iconSize} />
         </button>
-        <Checkbox isPublic={isPublic} setIsPublic={setIsPublic} />
+        {note.user === auth && <Checkbox isPublic={isPublic} setIsPublic={setIsPublic} />}
         <button
           className='transition duration-300 hover:scale-110'
           onClick={() => {

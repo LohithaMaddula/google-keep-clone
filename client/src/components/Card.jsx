@@ -117,9 +117,9 @@ function Card({ data, index, handlePin, handleBin, fetchNotes, handleRestore, ha
               <FaEdit />
             </button>
           </div>
-          {modal && modalNoteId === data._id && (
+          <Modal modal={modal && modalNoteId === data._id} setModal={setModal}>
             <EditModal note={data} fetchNotes={fetchNotes} setModal={setModal} />
-          )}
+          </Modal>
         </div>
       )}
     </>
