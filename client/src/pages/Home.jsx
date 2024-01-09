@@ -9,11 +9,11 @@ function Home() {
   const auth = useAuth()
   const [title, setTitle] = useState('')
   const [desc, setDesc] = useState('')
-  const [notes, setNotes] = useState([])
-  const [collabNotes, setCollabNotes] = useState([])
   const [theme, setTheme] = useState('white')
   const [collaborators, setCollaborators] = useState([])
   const [isPublic, setIsPublic] = useState(false)
+  const [notes, setNotes] = useState([])
+  const [collabNotes, setCollabNotes] = useState([])
 
   const handleSubmit = async () => {
     try {
@@ -32,6 +32,14 @@ function Home() {
       toast.error(error.response.data.error)
       console.error(error)
     }
+  }
+
+  const handleClear = () => {
+    setTitle('')
+    setDesc('')
+    setTheme('white')
+    setCollaborators([])
+    setIsPublic(false)
   }
 
   const fetchNotes = async () => {
@@ -97,6 +105,7 @@ function Home() {
           setCollaborators={setCollaborators}
           isPublic={isPublic}
           setIsPublic={setIsPublic}
+          handleClear={handleClear}
         />
       </div>
       {notes.length < 1 && collabNotes.length < 1 && (
@@ -106,7 +115,13 @@ function Home() {
       )}
       <div className='p-3'>
         {notes.some((note) => note.isPinned) && <h2 className='pb-3'>PINNED</h2>}
-        <NoteCard notes={notes} handleBin={handleBin} handlePin={handlePin} filterBy={'pinned'} />
+        <NoteCard
+          notes={notes}
+          handleBin={handleBin}
+          handlePin={handlePin}
+          filterBy={'pinned'}
+          fetchNotes={fetchNotes}
+        />
         {notes.some((note) => note.isPinned) && <h1 className='py-3'>OTHERS</h1>}
         <NoteCard
           notes={notes}

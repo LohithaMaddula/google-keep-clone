@@ -11,7 +11,7 @@ function Sidebar() {
           to='/'
           className={({ isActive }) =>
             `p-3 transition-all duration-300 hover:scale-105 rounded-full ${
-              isActive ? 'bg-yellow-200' : ''
+              isActive ? 'bg-yellow-200' : 'hover:bg-yellow-100'
             }`
           }
           title='Notes'
@@ -23,7 +23,7 @@ function Sidebar() {
           to='/reminders'
           className={({ isActive }) =>
             `p-3 transition-all duration-300 hover:scale-105 rounded-full ${
-              isActive ? 'bg-yellow-200' : ''
+              isActive ? 'bg-yellow-200' : 'hover:bg-yellow-100'
             }`
           }
           title='Notes'
@@ -35,7 +35,7 @@ function Sidebar() {
           to='/bin'
           className={({ isActive }) =>
             `p-3 transition-all duration-300 hover:scale-105 rounded-full ${
-              isActive ? 'bg-yellow-200' : ''
+              isActive ? 'bg-yellow-200' : 'hover:bg-yellow-100'
             }`
           }
           title='Bin'
