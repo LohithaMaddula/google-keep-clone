@@ -14,7 +14,7 @@ function Navbar() {
   return (
     <header className='flex justify-between p-3 '>
       <img
-        src='keep.png'
+        src='/keep.png'
         alt='keep'
         className='h-8 transition-all duration-300 cursor-pointer hover:drop-shadow-xl'
       />
