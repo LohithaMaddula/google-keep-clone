@@ -114,7 +114,7 @@ function Home() {
         </div>
       )}
       <div className='p-3'>
-        {notes.some((note) => note.isPinned) && <h2 className='pb-3'>PINNED</h2>}
+        {notes?.some((note) => note.isPinned) && <h2 className='pb-3'>PINNED</h2>}
         <NoteCard
           notes={notes}
           handleBin={handleBin}
@@ -122,7 +122,7 @@ function Home() {
           filterBy={'pinned'}
           fetchNotes={fetchNotes}
         />
-        {notes.some((note) => note.isPinned) && <h1 className='py-3'>OTHERS</h1>}
+        {notes?.some((note) => note.isPinned) && <h1 className='py-3'>OTHERS</h1>}
         <NoteCard
           notes={notes}
           handleBin={handleBin}
