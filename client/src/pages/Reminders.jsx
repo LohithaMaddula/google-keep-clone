@@ -22,7 +22,7 @@ function Reminders() {
 
   const filterNotes = () => {
     const filtered = notes.filter((note) =>
-      reminders.some((reminder) => reminder.noteId === note._id)
+      reminders?.some((reminder) => reminder.noteId === note._id)
     )
     setFilteredNotes(filtered)
   }
@@ -43,7 +43,7 @@ function Reminders() {
         <div className='flex items-center justify-center h-full transition duration-300'>
           <h1 className='text-xl font-bold text-gray-500'>No Reminders for now!</h1>
         </div>
-        ) : (
+      ) : (
         <NoteCard notes={filteredNotes} fetchNotes={fetchNotes} filterBy={'reminder'} />
       )}
     </div>
